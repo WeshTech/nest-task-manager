@@ -5,11 +5,9 @@ export class CreateTaskDto {
   @IsNotEmpty({ message: 'Title must not be empty' })
   title: string;
 
-  @IsString()
-  priority: string;
+  priority: number;
 
-  @IsString()
-  status: string;
+  status: number;
 
   @IsUUID()
   userID: string;

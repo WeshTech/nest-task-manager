@@ -26,4 +26,55 @@ export class TasksService {
       throw new InternalServerErrorException('Failed to create task');
     }
   }
+
+  async deleteTask(taskID: string): Promise<void> {
+    try {
+      await this.prisma.task.delete({
+        where: { id: taskID },
+      });
+    } catch {
+      throw new InternalServerErrorException('Failed to delete task');
+    }
+  }
+
+  async getTasksByUser(userID: string): Promise<Task[]> {
+    return this.prisma.task.findMany({
+      where: { userId: userID },
+    });
+  }
+
+  async updateTaskStatus(taskID: string, status: number): Promise<Task> {
+    try {
+      const updatedTask = await this.prisma.task.update({
+        where: { id: taskID },
+        data: { status },
+      });
+      return updatedTask;
+    } catch {
+      throw new InternalServerErrorException('Failed to update task status');
+    }
+  }
+
+  async updateTask(
+    taskID: string,
+    title: string,
+    priority: number,
+    status: number,
+  ): Promise<Task> {
+    try {
+      const updatedTask = await this.prisma.task.update({
+        where: { id: taskID },
+        data: { title, priority, status },
+      });
+      return updatedTask;
+    } catch {
+      throw new InternalServerErrorException('Failed to update task');
+    }
+  }
+
+  async getTaskByID(taskID: string): Promise<Task | null> {
+    return this.prisma.task.findUnique({
+      where: { id: taskID },
+    });
+  }
 }
